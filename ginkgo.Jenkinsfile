@@ -14,7 +14,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 240, unit: 'MINUTES')
+        timeout(time: 300, unit: 'MINUTES')
         timestamps()
         ansiColor('xterm')
     }
@@ -187,7 +187,7 @@ pipeline {
         }
         stage ("BDD-Test-PR"){
             options {
-                timeout(time: 110, unit: 'MINUTES')
+                timeout(time: 300, unit: 'MINUTES')
             }
             environment {
                 FAILFAST=setIfLabel("ci/fail-fast", "true", "false")
