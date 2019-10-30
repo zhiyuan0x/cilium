@@ -229,6 +229,8 @@ func (s *K8sWatcherSuite) TestUpdateToServiceEndpointsGH9525(c *C) {
 		policyManager,
 		policyRepository,
 		nil,
+		nil,
+		nil,
 	)
 	go w.k8sServiceHandler()
 	swg := lock.NewStoppableWaitGroup()
@@ -552,6 +554,8 @@ func (s *K8sWatcherSuite) Test_addK8sSVCs_ClusterIP(c *C) {
 		policyManager,
 		policyRepository,
 		svcManager,
+		nil,
+		nil,
 	)
 	go w.k8sServiceHandler()
 	swg := lock.NewStoppableWaitGroup()
@@ -1038,6 +1042,8 @@ func (s *K8sWatcherSuite) Test_addK8sSVCs_NodePort(c *C) {
 		policyManager,
 		policyRepository,
 		svcManager,
+		nil,
+		nil,
 	)
 	go w.k8sServiceHandler()
 	swg := lock.NewStoppableWaitGroup()
@@ -1361,6 +1367,8 @@ func (s *K8sWatcherSuite) Test_addK8sSVCs_GH9576_1(c *C) {
 		policyManager,
 		policyRepository,
 		svcManager,
+		nil,
+		nil,
 	)
 	go w.k8sServiceHandler()
 	swg := lock.NewStoppableWaitGroup()
@@ -1675,6 +1683,8 @@ func (s *K8sWatcherSuite) Test_addK8sSVCs_GH9576_2(c *C) {
 		policyManager,
 		policyRepository,
 		svcManager,
+		nil,
+		nil,
 	)
 	go w.k8sServiceHandler()
 	swg := lock.NewStoppableWaitGroup()

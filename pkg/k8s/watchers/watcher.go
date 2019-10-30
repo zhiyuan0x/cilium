@@ -25,6 +25,7 @@ import (
 
 	"github.com/cilium/cilium/pkg/controller"
 	"github.com/cilium/cilium/pkg/endpoint"
+	"github.com/cilium/cilium/pkg/ipcache"
 	"github.com/cilium/cilium/pkg/k8s"
 	k8smetrics "github.com/cilium/cilium/pkg/k8s/metrics"
 	"github.com/cilium/cilium/pkg/labels"
@@ -147,6 +148,8 @@ type K8sWatcher struct {
 	policyManager       policyManager
 	policyRepository    policyRepository
 	svcManager          svcManager
+	idallocator         k8s.CIDRIdentityAllocator
+	ipc                 ipcache.IPCacheInterface
 }
 
 func NewK8sWatcher(
@@ -155,6 +158,8 @@ func NewK8sWatcher(
 	policyManager policyManager,
 	policyRepository policyRepository,
 	svcManager svcManager,
+	idallocator k8s.CIDRIdentityAllocator,
+	ipc ipcache.IPCacheInterface,
 ) *K8sWatcher {
 	return &K8sWatcher{
 		k8sResourceSynced:   map[string]<-chan struct{}{},
@@ -164,6 +169,8 @@ func NewK8sWatcher(
 		policyManager:       policyManager,
 		policyRepository:    policyRepository,
 		svcManager:          svcManager,
+		idallocator:         idallocator,
+		ipc:                 ipc,
 	}
 }
 
@@ -420,7 +427,7 @@ func (k *K8sWatcher) k8sServiceHandler() {
 				return
 			}
 
-			translator := k8s.NewK8sTranslator(event.ID, *event.Endpoints, false, svc.Labels, true)
+			translator := k8s.NewK8sTranslator(event.ID, *event.Endpoints, false, svc.Labels, true, k.idallocator)
 			result, err := k.policyRepository.TranslateRules(translator)
 			if err != nil {
 				log.Errorf("Unable to repopulate egress policies from ToService rules: %v", err)
@@ -439,7 +446,7 @@ func (k *K8sWatcher) k8sServiceHandler() {
 				return
 			}
 
-			translator := k8s.NewK8sTranslator(event.ID, *event.Endpoints, true, svc.Labels, true)
+			translator := k8s.NewK8sTranslator(event.ID, *event.Endpoints, true, svc.Labels, true, k.idallocator)
 			result, err := k.policyRepository.TranslateRules(translator)
 			if err != nil {
 				log.Errorf("Unable to depopulate egress policies from ToService rules: %v", err)
