@@ -301,3 +301,6 @@ global:
 
   daemon:
     runPath: "/var/run/cilium"
+
+  # remoteNodeIdentity enables use of the remote node identity
+  remoteNodeIdentity: true
