@@ -321,4 +321,7 @@ const (
 
 	// RestoreV6Addr is used as match for cilium_host v6 (router) address
 	RestoreV6Addr = "cilium.v6.internal.raw "
+
+	// EnableRemoteNodeIdentity is the default value for option.EnableRemoteNodeIdentity
+	EnableRemoteNodeIdentity = false
 )
