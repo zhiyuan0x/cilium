@@ -33,6 +33,8 @@
 #include "csum.h"
 #include "conntrack.h"
 
+#define ENABLE_IPV4
+
 #define CILIUM_LB_MAP_MAX_FE		256
 
 #ifdef ENABLE_IPV6

@@ -21,6 +21,9 @@
  */
 #include "lib/utils.h"
 
+#define ENABLE_IPV4
+#define ENABLE_ROUTING
+
 DEFINE_IPV6(LXC_IP, 0xbe, 0xef, 0, 0, 0, 0, 0, 0x1, 0, 0, 0, 0x1, 0x01, 0x65, 0x82, 0xbc);
 DEFINE_U32(LXC_IPV4, 0x10203040);
 #define LXC_IPV4 fetch_u32(LXC_IPV4)
@@ -63,5 +66,5 @@ DEFINE_U32(SECLABEL_NB, 0xfffff);
  *  consider deprecating the hash-based CIDR lookup and removing the below.
  */
 #define IPCACHE4_PREFIXES 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, \
-4, 3, 2, 1
+                          4, 3, 2, 1
 #define IPCACHE6_PREFIXES 4, 3, 2, 1

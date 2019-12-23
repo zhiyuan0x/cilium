@@ -28,6 +28,26 @@
  */
 #include "lib/utils.h"
 
+#define CILIUM_NODE_MAC  \
+    {                    \
+        .addr = { 0x00,  \
+                  0x00,  \
+                  0x00,  \
+                  0x00,  \
+                  0x00,  \
+                  0x00 } \
+    }
+#define CILIUM_REMOTE_MAC \
+    {                     \
+        .addr = { 0x00,   \
+                  0x00,   \
+                  0x00,   \
+                  0x00,   \
+                  0x00,   \
+                  0x00 }  \
+    }
+#define CILIUM_NODE_IFINDEX 1
+
 DEFINE_MAC(NODE_MAC, 0xde, 0xad, 0xbe, 0xef, 0xc0, 0xde);
 #define NODE_MAC fetch_mac(NODE_MAC)
 
@@ -36,15 +56,49 @@ DEFINE_IPV6(ROUTER_IP, 0xbe, 0xef, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 
 #define HOST_IFINDEX 1
 #define CILIUM_IFINDEX 1
 #define NATIVE_DEV_IFINDEX 1
-#define NATIVE_DEV_MAC { .addr = { 0xce, 0x72, 0xa7, 0x03, 0x88, 0x56 } }
+#define NATIVE_DEV_MAC   \
+    {                    \
+        .addr = { 0xce,  \
+                  0x72,  \
+                  0xa7,  \
+                  0x03,  \
+                  0x88,  \
+                  0x56 } \
+    }
 DEFINE_IPV6(HOST_IP, 0xbe, 0xef, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0xa, 0x0, 0x2, 0xf, 0xff, 0xff);
 #define HOST_ID 1
 #define WORLD_ID 2
 #define UNMANAGED_ID 3
 #define HEALTH_ID 4
 #define INIT_ID 5
-#define HOST_IFINDEX_MAC { .addr = { 0xce, 0x72, 0xa7, 0x03, 0x88, 0x56 } }
-#define NAT46_PREFIX { .addr = { 0xbe, 0xef, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xa, 0x0, 0x0, 0x0, 0x0, 0x0 } }
+#define HOST_IFINDEX_MAC \
+    {                    \
+        .addr = { 0xce,  \
+                  0x72,  \
+                  0xa7,  \
+                  0x03,  \
+                  0x88,  \
+                  0x56 } \
+    }
+#define NAT46_PREFIX    \
+    {                   \
+        .addr = { 0xbe, \
+                  0xef, \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0xa,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0,  \
+                  0x0 } \
+    }
 #define ENABLE_MASQUERADE 1
 #define BPF_PKT_DIR 1
 #define NODEPORT_PORT_MIN 30000
@@ -52,12 +106,12 @@ DEFINE_IPV6(HOST_IP, 0xbe, 0xef, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0xa, 0x
 #define NODEPORT_PORT_MIN_NAT (NODEPORT_PORT_MAX + 1)
 #define NODEPORT_PORT_MAX_NAT 43835
 
-#define CT_CONNECTION_LIFETIME_TCP	21600
-#define CT_CONNECTION_LIFETIME_NONTCP	60
-#define CT_SERVICE_LIFETIME_TCP		21600
-#define CT_SERVICE_LIFETIME_NONTCP	60
-#define CT_SYN_TIMEOUT			60
-#define CT_CLOSE_TIMEOUT		10
+#define CT_CONNECTION_LIFETIME_TCP 21600
+#define CT_CONNECTION_LIFETIME_NONTCP 60
+#define CT_SERVICE_LIFETIME_TCP 21600
+#define CT_SERVICE_LIFETIME_NONTCP 60
+#define CT_SYN_TIMEOUT 60
+#define CT_CLOSE_TIMEOUT 10
 
 #ifdef ENABLE_MASQUERADE
 #define SNAT_MAPPING_MIN_PORT 1024
@@ -109,10 +163,26 @@ DEFINE_IPV6(SNAT_IPV6_EXTERNAL, 0xbe, 0xef, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0
 #define TUNNEL_ENDPOINT_MAP_SIZE 65536
 #define ENDPOINTS_MAP_SIZE 65536
 #define METRICS_MAP_SIZE 65536
-#define CILIUM_NET_MAC  { .addr = { 0xce, 0x72, 0xa7, 0x03, 0x88, 0x57 } }
+#define CILIUM_NET_MAC   \
+    {                    \
+        .addr = { 0xce,  \
+                  0x72,  \
+                  0xa7,  \
+                  0x03,  \
+                  0x88,  \
+                  0x57 } \
+    }
 #define LB_REDIRECT 1
-#define LB_DST_MAC { .addr = { 0xce, 0x72, 0xa7, 0x03, 0x88, 0x58 } }
-#define CILIUM_LB_MAP_MAX_ENTRIES	65536
+#define LB_DST_MAC       \
+    {                    \
+        .addr = { 0xce,  \
+                  0x72,  \
+                  0xa7,  \
+                  0x03,  \
+                  0x88,  \
+                  0x58 } \
+    }
+#define CILIUM_LB_MAP_MAX_ENTRIES 65536
 #define POLICY_MAP_SIZE 16384
 #define IPCACHE_MAP_SIZE 512000
 #define POLICY_PROG_MAP_SIZE ENDPOINTS_MAP_SIZE

@@ -448,6 +448,13 @@ esac
 # node_config.h header generation
 case "${MODE}" in
 	*)
+		CILIUM_NODE_MAC=$(ip link show $NATIVE_DEV | grep ether | awk '{print $2}')
+		CILIUM_NODE_MAC=$(mac2array $CILIUM_NODE_MAC)
+		echo "#define CILIUM_NODE_MAC { .addr = ${CILIUM_NODE_MAC}}" >> $RUNDIR/globals/node_config.h
+		echo "#define CILIUM_REMOTE_MAC { .addr = {0xee, 0xff, 0xff, 0xff, 0xff, 0xff} }" >> $RUNDIR/globals/node_config.h
+		CILIUM_NODE_IDX=$(cat /sys/class/net/${NATIVE_DEV}/ifindex)
+		echo "#define CILIUM_NODE_IFINDEX $CILIUM_NODE_IDX" >> $RUNDIR/globals/node_config.h
+
 		sed -i '/^#.*CILIUM_NET_MAC.*$/d' $RUNDIR/globals/node_config.h
 		CILIUM_NET_MAC=$(ip link show $HOST_DEV2 | grep ether | awk '{print $2}')
 		CILIUM_NET_MAC=$(mac2array $CILIUM_NET_MAC)

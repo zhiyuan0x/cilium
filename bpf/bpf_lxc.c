@@ -413,6 +413,8 @@ static inline int handle_ipv4_from_lxc(struct __sk_buff *skb, __u32 *dstID)
 	struct ipv4_ct_tuple tuple = {};
 #ifdef ENABLE_ROUTING
 	union macaddr router_mac = NODE_MAC;
+	union macaddr remote_mac = CILIUM_REMOTE_MAC;
+	union macaddr node_mac = CILIUM_NODE_MAC;
 #endif
 	void *data, *data_end;
 	struct iphdr *ip4;
@@ -422,6 +424,7 @@ static inline int handle_ipv4_from_lxc(struct __sk_buff *skb, __u32 *dstID)
 	struct ct_state ct_state_new = {};
 	struct ct_state ct_state = {};
 	__be32 orig_dip;
+	__be32 real_dip;
 	__u32 tunnel_endpoint = 0;
 	__u8 encrypt_key = 0;
 	__u32 monitor = 0;
@@ -438,6 +441,7 @@ static inline int handle_ipv4_from_lxc(struct __sk_buff *skb, __u32 *dstID)
 
 	tuple.daddr = ip4->daddr;
 	tuple.saddr = ip4->saddr;
+	real_dip = ip4->daddr;
 
 	l4_off = l3_off + ipv4_hdrlen(ip4);
 
@@ -663,7 +667,11 @@ to_host:
 
 pass_to_stack:
 #ifdef ENABLE_ROUTING
-	ret = ipv4_l3(skb, l3_off, NULL, (__u8 *) &router_mac.addr, ip4);
+	if ((bpf_ntohl(real_dip) & 0xffff0000) == 0xc0a80000) {
+		ipv4_l3(skb, l3_off, (__u8 *) &node_mac.addr, (__u8 *) &remote_mac.addr, ip4);
+		return redirect(CILIUM_NODE_IFINDEX, 0);
+	}
+    ret = ipv4_l3(skb, l3_off, NULL, (__u8 *) &router_mac.addr, ip4);
 	if (unlikely(ret != TC_ACT_OK))
 		return ret;
 #endif

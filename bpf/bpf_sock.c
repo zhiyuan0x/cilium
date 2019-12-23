@@ -33,6 +33,9 @@
 #include "lib/eps.h"
 #include "lib/metrics.h"
 
+#define ENABLE_IPV4
+#define ENABLE_HOST_SERVICES_UDP
+#define ENABLE_NODEPORT
 #define CONNECT_REJECT	0
 #define CONNECT_PROCEED	1
 #define SENDMSG_PROCEED	CONNECT_PROCEED
