@@ -20,6 +20,9 @@ case "$CILIUM_CNI_CHAINING_MODE" in
 "generic-veth")
 	CNI_CONF_NAME=${CNI_CONF_NAME:-05-cilium.conflist}
 	;;
+"generic-pod")
+	CNI_CONF_NAME=${CNI_CONF_NAME:-05-cilium.conflist}
+	;;
 "portmap")
 	CNI_CONF_NAME=${CNI_CONF_NAME:-05-cilium.conflist}
 	;;
