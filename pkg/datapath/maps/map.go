@@ -103,7 +103,7 @@ func (ms *MapSweeper) walk(path string, _ os.FileInfo, _ error) error {
 		ctmap.MapNameAny6,
 		ctmap.MapNameAny4,
 		callsmap.MapName,
-		endpoint.IpvlanMapName,
+		endpoint.EndpointTailCallMapName,
 	}
 
 	ms.checkStaleGlobalMap(path, filename)

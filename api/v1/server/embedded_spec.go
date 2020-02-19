@@ -1893,6 +1893,10 @@ func init() {
           "description": "Name of network device",
           "type": "string"
         },
+        "is-ipvlan": {
+          "description": "Wherther a endpoint is in ipvlan mode or nat",
+          "type": "boolean"
+        },
         "k8s-namespace": {
           "description": "Kubernetes namespace name",
           "type": "string"
@@ -5666,6 +5670,10 @@ func init() {
         "interface-name": {
           "description": "Name of network device",
           "type": "string"
+        },
+        "is-ipvlan": {
+          "description": "Wherther a endpoint is in ipvlan mode or nat",
+          "type": "boolean"
         },
         "k8s-namespace": {
           "description": "Kubernetes namespace name",

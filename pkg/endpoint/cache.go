@@ -113,7 +113,7 @@ func (ep *epInfoCache) InterfaceName() string {
 
 // MapPath returns tail call map path
 func (ep *epInfoCache) MapPath() string {
-	return ep.endpoint.BPFIpvlanMapPath()
+	return ep.endpoint.BPFTailCallMapPath()
 }
 
 // GetID returns the endpoint's ID.
@@ -144,6 +144,11 @@ func (ep *epInfoCache) Logger(subsystem string) *logrus.Entry {
 // HasIpvlanDataPath returns whether the endpoint's datapath is implemented via ipvlan.
 func (ep *epInfoCache) HasIpvlanDataPath() bool {
 	return ep.ipvlan
+}
+
+// HasIpvlanDataPath returns whether the endpoint's datapath is implemented via ipvlan.
+func (ep *epInfoCache) IsTailCallMapDatapath() bool {
+	return ep.endpoint.IsTailCallMapDatapath()
 }
 
 // IPv4Address returns the cached IPv4 address for the endpoint.

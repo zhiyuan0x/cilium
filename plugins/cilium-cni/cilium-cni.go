@@ -419,6 +419,7 @@ func cmdAdd(args *skel.CmdArgs) (err error) {
 			err = fmt.Errorf("unable to setup ipvlan datapath: %s", err)
 			return
 		}
+		ep.IsIpvlan = true
 		defer unix.Close(mapFD)
 	}
 

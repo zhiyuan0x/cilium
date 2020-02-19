@@ -53,6 +53,9 @@ type EndpointChangeRequest struct {
 	// Name of network device
 	InterfaceName string `json:"interface-name,omitempty"`
 
+	// Wherther a endpoint is in ipvlan mode or nat
+	IsIpvlan bool `json:"is-ipvlan,omitempty"`
+
 	// Kubernetes namespace name
 	K8sNamespace string `json:"k8s-namespace,omitempty"`
 

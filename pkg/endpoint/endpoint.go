@@ -103,8 +103,8 @@ const (
 	// invalid data.
 	StateInvalid = string(models.EndpointStateInvalid)
 
-	// IpvlanMapName specifies the tail call map for EP on egress used with ipvlan.
-	IpvlanMapName = "cilium_lxc_ipve_"
+	// EndpointTailCallMapName specifies the tail call map for EP used with pod netns mode.
+	EndpointTailCallMapName = "cilium_lxc_tailcall_"
 )
 
 // compile time interface check
@@ -329,6 +329,8 @@ type Endpoint struct {
 	allocator cache.IdentityAllocator
 
 	isHost bool
+
+	ipvlan bool
 }
 
 // SetAllocator sets the identity allocator for this endpoint.
@@ -381,12 +383,17 @@ func (e *Endpoint) bpfProgramInstalled() bool {
 	}
 }
 
-// HasIpvlanDataPath returns whether the daemon is running in ipvlan mode.
-func (e *Endpoint) HasIpvlanDataPath() bool {
+// IsTailCallMapDatapath returns whether the endpoint is with a tailcall map.
+func (e *Endpoint) IsTailCallMapDatapath() bool {
 	if e.datapathMapID > 0 {
 		return true
 	}
 	return false
+}
+
+// HasIpvlanDataPath returns whether the daemon is running in ipvlan mode.
+func (e *Endpoint) HasIpvlanDataPath() bool {
+	return e.ipvlan
 }
 
 // waitForProxyCompletions blocks until all proxy changes have been completed.
@@ -2122,7 +2129,7 @@ func (e *Endpoint) pinDatapathMap() error {
 	}
 	defer unix.Close(mapFd)
 
-	err = bpf.ObjPin(mapFd, e.BPFIpvlanMapPath())
+	err = bpf.ObjPin(mapFd, e.BPFTailCallMapPath())
 
 	if err == nil {
 		e.isDatapathMapPinned = true
