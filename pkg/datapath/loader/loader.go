@@ -26,6 +26,7 @@ import (
 	"github.com/cilium/cilium/pkg/bpf"
 	"github.com/cilium/cilium/pkg/byteorder"
 	"github.com/cilium/cilium/pkg/datapath"
+	"github.com/cilium/cilium/pkg/datapath/connector"
 	"github.com/cilium/cilium/pkg/datapath/link"
 	"github.com/cilium/cilium/pkg/datapath/linux/route"
 	"github.com/cilium/cilium/pkg/datapath/loader/metrics"
@@ -309,7 +310,7 @@ func (l *Loader) reloadDatapath(ctx context.Context, ep datapath.Endpoint, dirs 
 			return err
 		}
 	} else if ep.HasIpvlanDataPath() {
-		if err := graftDatapath(ctx, ep.MapPath(), objPath, symbolFromEndpoint); err != nil {
+		if err := graftDatapath(ctx, ep.MapPath(), objPath, symbolFromEndpoint, connector.TailCallMapIndexEngress); err != nil {
 			scopedLog := ep.Logger(Subsystem).WithFields(logrus.Fields{
 				logfields.Path: objPath,
 			})
@@ -320,6 +321,20 @@ func (l *Loader) reloadDatapath(ctx context.Context, ep datapath.Endpoint, dirs 
 				scopedLog.WithError(err).Warn("JoinEP: Failed to load program")
 			}
 			return err
+		}
+		if ep.RequireEgressProg() {
+			if err := graftDatapath(ctx, ep.MapPath(), objPath, symbolToEndpoint, connectioin.TailCallMapIndexIngress); err != nil {
+				scopedLog := ep.Logger(Subsystem).WithFields(logrus.Fields{
+					logfields.Path: objPath,
+				})
+				// Don't log an error here if the context was canceled or timed out;
+				// this log message should only represent failures with respect to
+				// loading the program.
+				if ctx.Err() == nil {
+					scopedLog.WithError(err).Warn("JoinEP: Failed to load program")
+				}
+				return err
+			}
 		}
 	} else {
 		if err := l.replaceDatapath(ctx, ep.InterfaceName(), objPath, symbolFromEndpoint, dirIngress); err != nil {
