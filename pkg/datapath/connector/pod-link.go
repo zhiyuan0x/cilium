@@ -35,6 +35,14 @@ func SetupNicInRemoteNs(netNs ns.NetNS, srcIfName, dstIfName string, egress bool
 		Max: unix.RLIM_INFINITY,
 	}
 
+	mapSize := 0
+	if egress {
+		mapSize = TailCallMapIndexEngress + 1
+	}
+	if ingress {
+		mapSize = TailCallMapIndexIngress + 1
+	}
+
 	err := unix.Setrlimit(unix.RLIMIT_MEMLOCK, &rl)
 	if err != nil {
 		return nil, fmt.Errorf("unable to increase rlimit: %w", err)
@@ -44,7 +52,7 @@ func SetupNicInRemoteNs(netNs ns.NetNS, srcIfName, dstIfName string, egress bool
 		Type:       ebpf.ProgramArray,
 		KeySize:    4,
 		ValueSize:  4,
-		MaxEntries: 2,
+		MaxEntries: uint32(mapSize),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create root BPF map for %q: %w", dstIfName, err)
