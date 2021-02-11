@@ -165,6 +165,11 @@ func RedeployCiliumWithMerge(vm *helpers.Kubectl,
 
 // DeployCiliumOptionsAndDNS deploys DNS and cilium with options into the kubernetes cluster
 func DeployCiliumOptionsAndDNS(vm *helpers.Kubectl, ciliumFilename string, options map[string]string) {
+	if helpers.GetCurrentIntegration() == helpers.CIIntegrationPodLink {
+		By("Installing podlink cni plugin")
+		vm.ApplyDefault(vm.GetFilePath("../examples/kubernetes/addons/pod-link/pod-link.yaml"))
+	}
+
 	redeployCilium(vm, ciliumFilename, options)
 
 	vm.RestartUnmanagedPodsInNamespace(helpers.LogGathererNamespace)
@@ -181,9 +186,6 @@ func DeployCiliumOptionsAndDNS(vm *helpers.Kubectl, ciliumFilename string, optio
 	case helpers.CIIntegrationFlannel:
 		By("Installing Flannel")
 		vm.ApplyDefault(vm.GetFilePath("../examples/kubernetes/addons/flannel/flannel.yaml"))
-	case helpers.CIIntegrationPodLink:
-		By("Installing ipvlan cni plugin")
-		vm.ApplyDefault(vm.GetFilePath("../examples/kubernetes/addons/pod-link/pod-link.yaml"))
 	default:
 	}
 
