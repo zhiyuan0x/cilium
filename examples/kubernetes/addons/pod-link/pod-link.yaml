@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cni-configuration
+  namespace: kube-system
+data:
+  cni-config: |
+    {
+      "name": "generic-veth",
+      "cniVersion": "0.3.1",
+      "plugins": [
+        {
+          "type": "ipvlan",
+          "master":"enp0s8",
+          "ipam": {
+            "type": "host-local",
+            "subnet": "192.168.37.0",
+            "rangeStart": "192.168.37.100",
+            "rangeEnd": "192.168.37.200"
+          }
+        },
+        {
+          "type": "cilium-cni"
+        }
+      ]
+    }
