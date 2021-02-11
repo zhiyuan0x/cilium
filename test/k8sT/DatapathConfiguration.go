@@ -181,6 +181,7 @@ var _ = Describe("K8sDatapathConfig", func() {
 		BeforeEach(func() {
 			SkipIfIntegration(helpers.CIIntegrationFlannel)
 			SkipIfIntegration(helpers.CIIntegrationGKE)
+			SkipIfIntegration(helpers.CIIntegrationPodLink)
 		})
 
 		validateBPFTunnelMap := func() {

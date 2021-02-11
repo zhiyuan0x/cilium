@@ -77,6 +77,9 @@ const (
 	// CIIntegrationMicrok8s is the value to set CNI_INTEGRATION when running with minikube.
 	CIIntegrationMinikube = "minikube"
 
+	// CIIntegrationPodLink is the value to set CNI_INTEGRATION when running with pod link mode.
+	CIIntegrationPodLink = "podlink"
+
 	LogGathererSelector = "k8s-app=cilium-test-logs"
 	CiliumSelector      = "k8s-app=cilium"
 )
@@ -128,6 +131,14 @@ var (
 		"tunnel":          "disabled",
 	}
 
+	podLinkHelmOverrides = map[string]string{
+		"cni.chainingMode": "pod-link",
+		"cni.customConf":   "true",
+		"cni.configMap":    "cni-configuration",
+		"tunnel":           "disabled",
+		"masquerade":       "false",
+	}
+
 	eksHelmOverrides = map[string]string{
 		"k8s.requireIPv4PodCIDR": "false",
 		"cni.chainingMode":       "aws-cni",
@@ -177,6 +188,7 @@ var (
 	// The key must be a string consisting of lower case characters.
 	helmOverrides = map[string]map[string]string{
 		CIIntegrationFlannel:  flannelHelmOverrides,
+		CIIntegrationPodLink:  podLinkHelmOverrides,
 		CIIntegrationEKS:      eksHelmOverrides,
 		CIIntegrationGKE:      gkeHelmOverrides,
 		CIIntegrationKind:     kindHelmOverrides,

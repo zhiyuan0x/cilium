@@ -181,6 +181,9 @@ func DeployCiliumOptionsAndDNS(vm *helpers.Kubectl, ciliumFilename string, optio
 	case helpers.CIIntegrationFlannel:
 		By("Installing Flannel")
 		vm.ApplyDefault(vm.GetFilePath("../examples/kubernetes/addons/flannel/flannel.yaml"))
+	case helpers.CIIntegrationPodLink:
+		By("Installing ipvlan cni plugin")
+		vm.ApplyDefault(vm.GetFilePath("../examples/kubernetes/addons/pod-link/pod-link.yaml"))
 	default:
 	}
 
