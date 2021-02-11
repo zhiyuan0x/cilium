@@ -323,7 +323,7 @@ func (l *Loader) reloadDatapath(ctx context.Context, ep datapath.Endpoint, dirs 
 			return err
 		}
 		if ep.RequireEgressProg() {
-			if err := graftDatapath(ctx, ep.MapPath(), objPath, symbolToEndpoint, connectioin.TailCallMapIndexIngress); err != nil {
+			if err := graftDatapath(ctx, ep.MapPath(), objPath, symbolToEndpoint, connector.TailCallMapIndexIngress); err != nil {
 				scopedLog := ep.Logger(Subsystem).WithFields(logrus.Fields{
 					logfields.Path: objPath,
 				})
